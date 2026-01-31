@@ -57,3 +57,35 @@ Verified installations:
 az version
 kubectl version --client
 helm version
+
+### 2. Login to Azure
+az login --tenant <tenant-id>
+
+### 3. Create Resource Group
+az group create --name aks-learning-rg --location eastus
+
+### 4. Create AKS Cluster
+az aks create \
+  --resource-group aks-learning-rg \
+  --name aks-learning \
+  --node-count 2 \
+  --node-vm-size Standard_B2s \
+  --enable-managed-identity \
+  --generate-ssh-keys
+
+### 5. Connect kubectl to Cluster
+az aks get-credentials -g aks-learning-rg -n aks-learning
+
+### 6. Verify Cluster
+kubectl get nodes
+kubectl get pods -A
+kubectl cluster-info
+
+✅ Result
+
+Cluster successfully created with 2 worker nodes:
+
+aks-nodepool1-xxxx   Ready
+aks-nodepool1-yyyy   Ready
+
+kubectl can communicate with the API server.

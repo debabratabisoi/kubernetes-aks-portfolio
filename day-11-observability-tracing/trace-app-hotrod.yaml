@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trace-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trace-app
+  template:
+    metadata:
+      labels:
+        app: trace-app
+    spec:
+      containers:
+        - name: hotrod
+          image: jaegertracing/example-hotrod:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-collector.tracing.svc.cluster.local:4317
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: grpc
+            - name: OTEL_SERVICE_NAME
+              value: trace-app
